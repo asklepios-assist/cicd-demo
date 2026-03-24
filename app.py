@@ -19,7 +19,7 @@ def health():
 
 @app.route("/add/<int:a>/<int:b>")
 def add(a, b):
-    return jsonify({"result": a + b})
+    return jsonify({"result": a * b})  # BUG: multiplying instead of adding!
 
 
 if __name__ == "__main__":
