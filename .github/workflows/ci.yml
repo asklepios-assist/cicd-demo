@@ -1,0 +1,44 @@
+# CI Pipeline — runs on every push and pull request
+# This is the "Continuous Integration" part:
+# automatically test your code to catch bugs early.
+
+name: CI
+
+# WHEN does this run?
+on:
+  push:
+    branches: [main]       # Every push to main
+  pull_request:
+    branches: [main]       # Every PR targeting main
+
+# WHAT does it do?
+jobs:
+  test:
+    runs-on: ubuntu-latest  # GitHub provides a fresh VM
+
+    steps:
+      # Step 1: Check out the code
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # Step 2: Set up Python
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      # Step 3: Install dependencies
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      # Step 4: Run tests
+      - name: Run tests
+        run: |
+          pytest test_app.py -v
+
+      # Step 5: Run a quick smoke test
+      - name: Smoke test
+        run: |
+          python -c "from app import app; print('App imports OK')"
